@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hey Rahaf</title>
+    <!-- Google Fonts for ultra-elegant, smooth typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-dark: #0b0813;
+            --bg-card: #151026;
+            --accent-purple: #8a4fff;
+            --accent-light: #e0aaff;
+            --text-main: #f3eeff;
+            --text-muted: #9d94b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Cormorant Garamond', serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Container styling */
+        .container {
+            width: 90%;
+            max-width: 650px;
+            padding: 60px 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        /* --- SCREEN 1: THE ACTIVITY/LOCK --- */
+        #lock-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        h1.title {
+            font-family: 'Cinzel', serif;
+            font-weight: 400;
+            font-size: 2.2rem;
+            letter-spacing: 4px;
+            margin-bottom: 40px;
+            color: var(--text-main);
+            text-transform: lowercase;
+        }
+
+        .question-box {
+            background: var(--bg-card);
+            border: 1px solid rgba(138, 79, 255, 0.2);
+            border-radius: 20px;
+            padding: 50px 40px;
+            width: 100%;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+        }
+
+        .question-box label {
+            display: block;
+            font-size: 1.4rem;
+            color: var(--accent-light);
+            margin-bottom: 30px;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+        }
+
+        .input-wrapper {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 16px;
+            background: rgba(11, 8, 19, 0.6);
+            border: 1px solid rgba(138, 79, 255, 0.3);
+            border-radius: 8px;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            text-align: center;
+            outline: none;
+            letter-spacing: 1px;
+            transition: all 0.4s ease;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--accent-purple);
+            box-shadow: 0 0 20px rgba(138, 79, 255, 0.25);
+        }
+
+        button {
+            background: transparent;
+            color: var(--accent-light);
+            border: 1px solid var(--accent-purple);
+            padding: 14px 45px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+
+        button:hover {
+            background: var(--accent-purple);
+            color: #fff;
+            box-shadow: 0 0 15px rgba(138, 79, 255, 0.4);
+        }
+
+        .error-msg {
+            color: #ff4d6d;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            height: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        /* --- SCREEN 2: THE CELEBRATION --- */
+        #success-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: var(--bg-dark);
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .correct-text {
+            font-family: 'Cinzel', serif;
+            font-size: 4.5rem;
+            font-weight: 500;
+            letter-spacing: 8px;
+            color: var(--text-main);
+            text-shadow: 0 0 40px rgba(138, 79, 255, 0.5);
+            animation: scaleUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .sub-correct-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 1.8rem;
+            color: var(--accent-light);
+            margin-top: 25px;
+            opacity: 0;
+            animation: fadeInSimple 0.6s ease forwards;
+            animation-delay: 0.5s;
+        }
+
+        /* --- SCREEN 3: THE POEM --- */
+        #poem-screen {
+            display: none;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1.5s ease, transform 1.5s ease;
+        }
+
+        .poem-content {
+            font-size: 1.45rem;
+            line-height: 2.2;
+            color: var(--text-main);
+            text-align: center;
+            margin-bottom: 50px;
+            font-weight: 400;
+        }
+
+        .poem-content p {
+            margin-bottom: 35px;
+        }
+
+        .divider {
+            height: 1px;
+            width: 50px;
+            background: rgba(138, 79, 255, 0.4);
+            margin: 45px auto;
+        }
+
+        .kafka-quote {
+            font-style: italic;
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            line-height: 1.9;
+            max-width: 520px;
+            margin: 0 auto 45px auto;
+        }
+
+        .celebration-msg {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            color: var(--accent-light);
+            line-height: 2;
+            margin-top: 20px;
+            text-shadow: 0 0 15px rgba(224, 170, 255, 0.2);
+        }
+
+        /* Animations */
+        @keyframes scaleUp {
+            0% { transform: scale(0.85); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes fadeInSimple {
+            0% { opacity: 0; transform: translateY(15px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-out {
+            opacity: 0 !important;
+            transform: translateY(-20px) !important;
+        }
+
+        .fade-in {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            h1.title { font-size: 1.8rem; letter-spacing: 2px; }
+            .correct-text { font-size: 2.8rem; letter-spacing: 4px; }
+            .sub-correct-text { font-size: 1.3rem; }
+            .poem-content { font-size: 1.25rem; line-height: 2; }
+            .celebration-msg { font-size: 0.95rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <!-- Screen 1: Unlock Activity -->
+        <div id="lock-screen">
+            <h1 class="title">hey rahaf</h1>
+            <div class="question-box">
+                <label for="answer-input">What shines brighter than the stars?</label>
+                <div class="input-wrapper">
+                    <input type="text" id="answer-input" placeholder="Type your answer here..." autocomplete="off">
+                </div>
+                <button onclick="checkAnswer()">Unlock</button>
+                <div id="error-message" class="error-msg">Incorrect. Try again.</div>
+            </div>
+        </div>
+
+        <!-- Screen 3: The Poem Presentation -->
+        <div id="poem-screen">
+            <h1 class="title" style="margin-bottom: 60px; text-transform: none;">to you my beloved Rahaf</h1>
+            
+            <div class="poem-content">
+                <p>she is my world, my beginning and end,<br>my greatest adventure, my very best friend</p>
+                <p>the world is a shadow when compared to you<br>the truest of blessings i ever once knew</p>
+                <p>pure is voice that she does own<br>the sweetest comfort that ive ever known</p>
+                <p>the moon looks down from up above<br>admiring her with silent love</p>
+                <p>the stars all talk as she pass<br>like diamonds falling on a glass</p>
+                <p>walk is just like the midnight air,<br>with silent beauty, pretty and rare</p>
+                <p>night sky is huge and deep<br>a quiet space where angels sleep</p>
+                <p>but all its stars would fade from view,<br>the moment my gaze drifts to you.</p>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="kafka-quote">
+                as kafka once said:<br>
+                “if a million loved you, im one of them and if one loved you that was me, if no one loved you, then know that i am dead”
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Custom 6 Months & Eid Celebration Message -->
+            <div class="celebration-msg">
+                6 months of loving you, 6 months of eid..<br>Eid Mubarak
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Screen 2: Big Correct Intermission Overlay -->
+    <div id="success-screen">
+        <div class="correct-text">CORRECT!</div>
+        <div class="sub-correct-text">it’s because you are my sun</div>
+    </div>
+
+    <script>
+        // Handle "Enter" keypress in input field
+        document.getElementById('answer-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkAnswer();
+            }
+        });
+
+        function checkAnswer() {
+            const input = document.getElementById('answer-input').value.trim().toLowerCase();
+            const errorMsg = document.getElementById('error-message');
+            
+            if (input === 'othmani') {
+                errorMsg.style.opacity = '0';
+                transitionSequence();
+            } else {
+                errorMsg.style.opacity = '1';
+                const inputEl = document.getElementById('answer-input');
+                inputEl.style.borderColor = '#ff4d6d';
+                setTimeout(() => inputEl.style.borderColor = 'rgba(138, 79, 255, 0.3)', 500);
+            }
+        }
+
+        function transitionSequence() {
+            const lockScreen = document.getElementById('lock-screen');
+            const successScreen = document.getElementById('success-screen');
+            const poemScreen = document.getElementById('poem-screen');
+
+            lockScreen.classList.add('fade-out');
+
+            setTimeout(() => {
+                lockScreen.style.display = 'none';
+                successScreen.style.display = 'flex';
+                
+                setTimeout(() => {
+                    successScreen.style.opacity = '0';
+                    successScreen.style.transition = 'opacity 0.8s ease';
+                    
+                    setTimeout(() => {
+                        successScreen.style.display = 'none';
+                        poemScreen.style.display = 'block';
+                        
+                        setTimeout(() => {
+                            poemScreen.classList.add('fade-in');
+                        }, 50);
+
+                    }, 800);
+                }, 2500); /* Keeps the beautiful transition screen visible just long enough to read smoothly */
+
+            }, 800);
+        }
+    </script>
+</body>
+</html>
